@@ -1,4 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { Reveal } from "@/components/motion";
 import {
   experiences,
@@ -27,6 +30,9 @@ const copy = {
     skills: "Technical Focus",
     resume: "Resume",
     resumeText: "Download the latest PDF resume. Replace these PDFs when your CV is updated.",
+    proof: "Proof of Work",
+    proofText:
+      "Fast links for recruiters and collaborators: inspect the code profile, read case studies, download the resume, or contact me directly.",
     aboutTitle: "About",
     aboutText:
       "My strongest direction is AI systems engineering: combining model-facing work with product judgment, frontend/backend implementation, and systems thinking from trading and quant contexts.",
@@ -47,6 +53,9 @@ const copy = {
     skills: "技术方向",
     resume: "简历",
     resumeText: "下载最新 PDF 简历。之后更新简历时只需要替换 public/resume 下的 PDF。",
+    proof: "工作证明",
+    proofText:
+      "给招聘方和合作方的快速入口：查看代码主页、阅读项目案例、下载简历或直接联系。",
     aboutTitle: "关于我",
     aboutText:
       "我当前最清晰的方向是 AI systems engineering：把模型相关能力、产品判断、前后端实现，以及交易/量化场景中的系统思维结合起来。",
@@ -80,39 +89,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           </div>
         </Reveal>
 
-        <Reveal delay={0.12} className="relative">
-          <div className="rounded-[2rem] border border-white/10 bg-white/[.06] p-5 shadow-2xl shadow-cyan-950/40 backdrop-blur">
-            <div className="rounded-[1.5rem] border border-cyan-300/20 bg-slate-950/80 p-5">
-              <div className="mb-6 flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm text-slate-400">Current signal</p>
-                  <p className="text-lg font-semibold text-cyan-100">
-                    AI Systems Engineer
-                  </p>
-                </div>
-                <span className="rounded-full bg-emerald-300/10 px-3 py-1 text-xs text-emerald-200">
-                  Open to opportunities
-                </span>
-              </div>
-              <div className="space-y-4">
-                {[
-                  "LLM agent workflow design",
-                  "Full-stack AI product delivery",
-                  "Trading systems and C++ quant development",
-                  "Responsive, production-ready frontend engineering",
-                ].map((item) => (
-                  <div
-                    className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] p-4"
-                    key={item}
-                  >
-                    <span className="size-2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,.9)]" />
-                    <span className="text-sm text-slate-200">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Reveal>
+        <ProfileCard locale={locale} />
       </section>
 
       <SectionIntro title={t.featured} text={t.featuredText} />
@@ -126,6 +103,9 @@ export function HomePage({ locale }: { locale: Locale }) {
         text={locale === "en" ? profile.headline : profile.headlineZh}
       />
       <SkillCloud />
+
+      <SectionIntro title={t.proof} text={t.proofText} />
+      <ProofOfWork locale={locale} />
 
       <ResumeBlock locale={locale} />
     </SiteContent>
@@ -166,6 +146,17 @@ export function ProjectPage({
           </span>
         ))}
       </div>
+      <div className="mb-10 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
+        <CaseList
+          title={locale === "en" ? "Evidence / Impact" : "证据 / 影响"}
+          items={project.impact[locale]}
+        />
+        <CaseList
+          title={locale === "en" ? "Highlights" : "亮点"}
+          items={project.highlights[locale]}
+        />
+      </div>
+      <ProjectLinks project={project} locale={locale} />
       <div className="grid gap-5 lg:grid-cols-[.8fr_1.2fr]">
         <CaseCard title={locale === "en" ? "Problem" : "问题"} text={p.problem} />
         <CaseCard title={locale === "en" ? "My Role" : "我的职责"} text={p.role} />
@@ -318,12 +309,22 @@ function ProjectGrid({
           <Reveal delay={index * 0.04} className="card group" key={project.slug}>
             <div className="mb-6 flex items-center justify-between">
               <span className="tag">{project.category}</span>
-              <span className="text-sm text-slate-500">{project.year}</span>
+              <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs text-emerald-100">
+                {project.status}
+              </span>
             </div>
             <h3 className="text-2xl font-semibold text-white group-hover:text-cyan-100">
               {p.title}
             </h3>
             <p className="mt-4 min-h-24 leading-7 text-slate-300">{p.summary}</p>
+            <ul className="mt-5 space-y-2 text-sm text-slate-300">
+              {project.highlights[locale].slice(0, 3).map((item) => (
+                <li className="flex gap-2" key={item}>
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-cyan-300" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
             <div className="mt-6 flex flex-wrap gap-2">
               {project.stack.slice(0, 4).map((item) => (
                 <span className="tag-muted" key={item}>
@@ -390,6 +391,167 @@ function SkillCloud() {
         </span>
       ))}
     </Reveal>
+  );
+}
+
+function ProfileCard({ locale }: { locale: Locale }) {
+  const focus =
+    locale === "en"
+      ? [
+          "AI systems: agent workflows, memory, evaluation",
+          "Quant engineering: C++ and trading infrastructure",
+          "Product engineering: full-stack delivery and clear UX",
+        ]
+      : [
+          "AI systems：Agent 工作流、记忆、评估",
+          "量化工程：C++ 与交易基础设施",
+          "产品工程：全栈交付与清晰 UX",
+        ];
+
+  return (
+    <Reveal delay={0.12} className="relative">
+      <div className="rounded-[2rem] border border-white/10 bg-white/[.06] p-5 shadow-2xl shadow-cyan-950/40 backdrop-blur">
+        <div className="rounded-[1.5rem] border border-cyan-300/20 bg-slate-950/80 p-5">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+            <AvatarVisual />
+            <div>
+              <p className="text-sm text-slate-400">
+                {locale === "en" ? "Current signal" : "当前定位"}
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-white">
+                AI Systems Engineer
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">
+                {locale === "en" ? profile.headline : profile.headlineZh}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            <span className="rounded-full bg-emerald-300/10 px-3 py-1 text-xs text-emerald-200">
+              {locale === "en" ? "Open to opportunities" : "开放机会沟通"}
+            </span>
+            <span className="tag-muted">{profile.location}</span>
+          </div>
+
+          <div className="mt-6 space-y-4">
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-cyan-200/80">
+              {locale === "en" ? "Currently focused on" : "当前关注"}
+            </p>
+            {focus.map((item) => (
+              <div
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] p-4"
+                key={item}
+              >
+                <span className="size-2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,.9)]" />
+                <span className="text-sm text-slate-200">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  );
+}
+
+function AvatarVisual() {
+  const avatarPath = join(process.cwd(), "public", "profile", "avatar.jpg");
+  const hasAvatar = existsSync(avatarPath);
+
+  if (hasAvatar) {
+    return (
+      <Image
+        src="/profile/avatar.jpg"
+        alt={`${profile.displayName} profile photo`}
+        width={112}
+        height={112}
+        className="size-28 shrink-0 rounded-3xl border border-cyan-300/30 object-cover shadow-[0_0_40px_rgba(34,211,238,.22)]"
+        priority
+      />
+    );
+  }
+
+  return (
+    <div className="grid size-28 shrink-0 place-items-center rounded-3xl border border-cyan-300/30 bg-[radial-gradient(circle_at_30%_20%,rgba(103,232,249,.32),transparent_36%),linear-gradient(135deg,rgba(14,165,233,.2),rgba(168,85,247,.16))] shadow-[0_0_40px_rgba(34,211,238,.22)]">
+      <span className="text-4xl font-semibold tracking-tight text-cyan-100">
+        ZZ
+      </span>
+    </div>
+  );
+}
+
+function ProofOfWork({ locale }: { locale: Locale }) {
+  const prefix = locale === "en" ? "" : "/zh";
+  const items = [
+    {
+      label: "GitHub",
+      text:
+        locale === "en"
+          ? "Inspect my public engineering footprint."
+          : "查看我的公开工程项目与代码主页。",
+      href: profile.github,
+    },
+    {
+      label: locale === "en" ? "Case Studies" : "项目案例",
+      text:
+        locale === "en"
+          ? "Read structured project breakdowns."
+          : "阅读结构化项目拆解。",
+      href: `${prefix}/projects`,
+    },
+    {
+      label: locale === "en" ? "Resume" : "简历",
+      text:
+        locale === "en"
+          ? "Download the latest PDF resume."
+          : "下载最新 PDF 简历。",
+      href: profile.resumeEn,
+    },
+    {
+      label: locale === "en" ? "Contact" : "联系",
+      text:
+        locale === "en"
+          ? "Reach me directly by email."
+          : "通过邮件直接联系我。",
+      href: `mailto:${profile.email}`,
+    },
+  ];
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {items.map((item, index) => (
+        <Reveal className="card block hover:border-cyan-300/40" delay={index * 0.04} key={item.label}>
+          <a href={item.href} className="block">
+            <p className="text-sm uppercase tracking-[0.25em] text-cyan-200/80">
+              {item.label}
+            </p>
+            <p className="mt-4 leading-7 text-slate-300">{item.text}</p>
+          </a>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+function ProjectLinks({
+  project,
+  locale,
+}: {
+  project: Project;
+  locale: Locale;
+}) {
+  if (!project.links?.length) {
+    return null;
+  }
+
+  return (
+    <div className="mb-10 flex flex-wrap gap-3">
+      {project.links.map((link) => (
+        <a className="btn-secondary" href={link.href} key={link.href}>
+          {locale === "en" ? link.label : link.label}
+        </a>
+      ))}
+    </div>
   );
 }
 

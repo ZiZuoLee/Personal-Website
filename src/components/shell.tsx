@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { NavLinks } from "@/components/nav-links";
 import { profile, type Locale } from "@/lib/content";
 
 const nav = {
@@ -53,12 +54,8 @@ export function SiteShell({
             </span>
           </Link>
 
-          <div className="hidden items-center gap-7 text-sm text-slate-300 md:flex">
-            {nav[locale].map(([label, href]) => (
-              <Link key={href} href={href} className="transition hover:text-cyan-200">
-                {label}
-              </Link>
-            ))}
+          <div className="hidden items-center gap-7 text-sm md:flex">
+            <NavLinks items={nav[locale]} />
           </div>
 
           <div className="flex items-center gap-3">
@@ -77,12 +74,8 @@ export function SiteShell({
           </div>
         </nav>
 
-        <div className="flex gap-4 overflow-x-auto px-4 pb-3 text-sm text-slate-400 md:hidden">
-          {nav[locale].map(([label, href]) => (
-            <Link key={href} href={href} className="shrink-0 hover:text-cyan-200">
-              {label}
-            </Link>
-          ))}
+        <div className="flex gap-2 overflow-x-auto px-4 pb-3 text-sm md:hidden">
+          <NavLinks items={nav[locale]} mobile />
         </div>
       </header>
 

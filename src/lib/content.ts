@@ -6,10 +6,22 @@ export type Project = {
   category: string;
   stack: string[];
   year: string;
-  demoUrl?: string;
-  githubUrl?: string;
+  status: string;
+  impact: LocalizedList;
+  highlights: LocalizedList;
+  links?: ProjectLink[];
   en: ProjectCopy;
   zh: ProjectCopy;
+};
+
+type LocalizedList = {
+  en: string[];
+  zh: string[];
+};
+
+type ProjectLink = {
+  label: string;
+  href: string;
 };
 
 type ProjectCopy = {
@@ -42,6 +54,7 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/zizuolee/",
   resumeEn: "/resume/lee-zi-zuo-resume.pdf",
   resumeZh: "/resume/lee-zi-zuo-resume-zh.pdf",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://zizuolee.com",
   headline:
     "Fudan CS student building AI systems, full-stack products, trading infrastructure, and C++ quant engineering tools.",
   headlineZh:
@@ -70,6 +83,21 @@ export const projects: Project[] = [
     category: "AI Agents",
     stack: ["LLM", "Agent Workflow", "Evaluation", "TypeScript"],
     year: "2026",
+    status: "Case study",
+    impact: {
+      en: [
+        "Designed as a portfolio-level AI systems project with explicit planning, execution, memory, and review stages.",
+        "Evidence is currently architectural and workflow-based; quantitative evaluation is the next planned improvement.",
+      ],
+      zh: [
+        "以 portfolio 级 AI systems 项目设计，明确拆分规划、执行、记忆和复盘阶段。",
+        "当前证据以架构和工作流为主；量化评估是下一步改进重点。",
+      ],
+    },
+    highlights: {
+      en: ["Explicit agent workflow", "Inspectable checkpoints", "Evaluation-first design"],
+      zh: ["显式 Agent 工作流", "可检查 checkpoint", "评估优先设计"],
+    },
     en: {
       title: "AI Director Agent",
       summary:
@@ -120,6 +148,21 @@ export const projects: Project[] = [
     category: "AI Systems",
     stack: ["LLM", "Memory", "Retrieval", "Python"],
     year: "2025",
+    status: "Technical prototype",
+    impact: {
+      en: [
+        "Moves the project story from a basic LLM interface toward AI infrastructure: memory schema, retrieval policy, and debuggability.",
+        "Next evidence target: compare retrieval policies with baseline and ablation tests.",
+      ],
+      zh: [
+        "把项目叙事从基础 LLM 界面推进到 AI infrastructure：记忆 schema、检索策略和可调试性。",
+        "下一步证据目标：用 baseline 和消融实验比较不同检索策略。",
+      ],
+    },
+    highlights: {
+      en: ["Structured memory", "Retrieval hooks", "Debuggable state"],
+      zh: ["结构化记忆", "检索接口", "可调试状态"],
+    },
     en: {
       title: "LLM Agent Memory System",
       summary:
@@ -169,6 +212,21 @@ export const projects: Project[] = [
     category: "Full-stack AI",
     stack: ["React", "Node.js", "LLM", "Automation"],
     year: "2025",
+    status: "Internship work",
+    impact: {
+      en: [
+        "Shows production-oriented AI product exposure across frontend, backend, automation, and model-assisted workflows.",
+        "Public description intentionally avoids confidential product metrics.",
+      ],
+      zh: [
+        "体现生产导向的 AI 产品经验，覆盖前端、后端、自动化和模型辅助工作流。",
+        "公开描述刻意避免披露保密业务指标。",
+      ],
+    },
+    highlights: {
+      en: ["AI product workflow", "Full-stack delivery", "Reviewable model outputs"],
+      zh: ["AI 产品工作流", "全栈交付", "可检查模型输出"],
+    },
     en: {
       title: "AI Resume Automation Platform",
       summary:
@@ -219,6 +277,21 @@ export const projects: Project[] = [
     category: "Trading Systems",
     stack: ["React", "TypeScript", "Web3", "Trading UI"],
     year: "2025",
+    status: "Internship work",
+    impact: {
+      en: [
+        "Builds evidence for product engineering in high-precision trading environments where UI clarity affects decision quality.",
+        "Connects frontend systems work with later C++ quant and trading infrastructure experience.",
+      ],
+      zh: [
+        "证明在高精度交易产品环境中的产品工程能力，UI 清晰度会直接影响决策质量。",
+        "把前端系统经验与后续 C++ 量化和交易基础设施经历连接起来。",
+      ],
+    },
+    highlights: {
+      en: ["Trading UI", "State-heavy interfaces", "Responsive product engineering"],
+      zh: ["交易 UI", "复杂状态界面", "响应式产品工程"],
+    },
     en: {
       title: "Trading Systems Frontend",
       summary:
