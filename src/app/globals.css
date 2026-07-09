@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050814;
+  --foreground: #f8fafc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: rgba(103, 232, 249, 0.32);
+  color: white;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-cyan-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-[0_0_36px_rgba(103,232,249,.25)] transition hover:bg-cyan-200;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/50 hover:bg-white/10;
+  }
+
+  .card {
+    @apply rounded-[1.75rem] border border-white/10 bg-white/[.055] p-6 shadow-2xl shadow-slate-950/20 backdrop-blur transition;
+  }
+
+  .tag {
+    @apply rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 text-xs font-medium text-cyan-100;
+  }
+
+  .tag-muted {
+    @apply rounded-full border border-white/10 bg-white/[.04] px-3 py-1 text-xs font-medium text-slate-300;
+  }
+}
