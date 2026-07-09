@@ -1,0 +1,15 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#050814"/>
+  <g opacity="0.55">
+    <path d="M0 120H1200M0 240H1200M0 360H1200M0 480H1200M120 0V630M240 0V630M360 0V630M480 0V630M600 0V630M720 0V630M840 0V630M960 0V630M1080 0V630" stroke="white" stroke-opacity="0.08"/>
+  </g>
+  <circle cx="970" cy="120" r="260" fill="#22D3EE" fill-opacity="0.17"/>
+  <circle cx="260" cy="560" r="260" fill="#A855F7" fill-opacity="0.16"/>
+  <rect x="80" y="92" width="1040" height="446" rx="42" fill="white" fill-opacity="0.055" stroke="white" stroke-opacity="0.12"/>
+  <rect x="124" y="142" width="122" height="122" rx="34" fill="#22D3EE" fill-opacity="0.12" stroke="#67E8F9" stroke-opacity="0.38"/>
+  <text x="154" y="220" fill="#CFFAFE" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="700">ZZ</text>
+  <text x="286" y="178" fill="#67E8F9" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="6">PORTFOLIO</text>
+  <text x="124" y="342" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="700">Zi Zuo Lee</text>
+  <text x="124" y="410" fill="#CBD5E1" font-family="Arial, Helvetica, sans-serif" font-size="34">AI Systems · Full-stack Products · C++ Quant Engineering</text>
+  <text x="124" y="478" fill="#94A3B8" font-family="Arial, Helvetica, sans-serif" font-size="25">Fudan CS student building practical systems across product, trading, and infrastructure.</text>
+</svg>
