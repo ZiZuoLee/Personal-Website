@@ -17,6 +17,15 @@ body {
   color: var(--foreground);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid rgb(103 232 249);
+  outline-offset: 4px;
+}
+
 ::selection {
   background: rgba(103, 232, 249, 0.32);
   color: white;
@@ -41,5 +50,20 @@ body {
 
   .tag-muted {
     @apply rounded-full border border-white/10 bg-white/[.04] px-3 py-1 text-xs font-medium text-slate-300;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
