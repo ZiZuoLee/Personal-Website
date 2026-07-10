@@ -13,6 +13,33 @@ import {
   type Project,
 } from "@/lib/content";
 
+const categoryAccents = {
+  "AI Agents": {
+    gradient: "from-cyan-300/30 via-sky-400/10 to-fuchsia-400/20",
+    ring: "border-cyan-300/30",
+    dot: "bg-cyan-300",
+    label: "agent graph",
+  },
+  "AI Systems": {
+    gradient: "from-violet-300/30 via-cyan-400/10 to-blue-400/20",
+    ring: "border-violet-300/30",
+    dot: "bg-violet-300",
+    label: "memory stack",
+  },
+  "Full-stack AI": {
+    gradient: "from-emerald-300/25 via-cyan-400/10 to-sky-400/20",
+    ring: "border-emerald-300/30",
+    dot: "bg-emerald-300",
+    label: "product workflow",
+  },
+  "Trading Systems": {
+    gradient: "from-amber-300/25 via-orange-400/10 to-cyan-400/20",
+    ring: "border-amber-300/30",
+    dot: "bg-amber-300",
+    label: "market signal",
+  },
+} as const;
+
 const copy = {
   en: {
     eyebrow: "Portfolio / AI Systems / Quant Engineering",
@@ -33,9 +60,14 @@ const copy = {
     proof: "Proof of Work",
     proofText:
       "Fast links for recruiters and collaborators: inspect the code profile, read case studies, download the resume, or contact me directly.",
+    aboutPill: "Professional narrative",
     aboutTitle: "About",
     aboutText:
       "My strongest direction is AI systems engineering: combining model-facing work with product judgment, frontend/backend implementation, and systems thinking from trading and quant contexts.",
+    aboutNarrative:
+      "My work sits at the intersection of AI systems, product engineering, and financial technology. I care about reliable workflows more than isolated demos: how the model is evaluated, how the interface guides decisions, and how the system behaves when the task gets messy.",
+    aboutBridge:
+      "That is why my portfolio combines LLM agent work, production AI product experience, trading interfaces, and C++ quant development. The through-line is practical systems judgment.",
   },
   zh: {
     eyebrow: "个人网站 / AI Systems / 量化工程",
@@ -56,9 +88,14 @@ const copy = {
     proof: "工作证明",
     proofText:
       "给招聘方和合作方的快速入口：查看代码主页、阅读项目案例、下载简历或直接联系。",
+    aboutPill: "职业叙事",
     aboutTitle: "关于我",
     aboutText:
       "我当前最清晰的方向是 AI systems engineering：把模型相关能力、产品判断、前后端实现，以及交易/量化场景中的系统思维结合起来。",
+    aboutNarrative:
+      "我的经历交汇在 AI systems、产品工程和金融科技之间。我更关注可靠工作流，而不是孤立 demo：模型如何评估、界面如何帮助决策、系统在复杂任务中如何保持可控。",
+    aboutBridge:
+      "因此这个 portfolio 会同时呈现 LLM Agent、生产环境 AI 产品、交易界面和 C++ 量化开发。它们共同指向的是实用的系统工程判断。",
   },
 } as const;
 
@@ -215,7 +252,46 @@ export function AboutPage({ locale }: { locale: Locale }) {
   return (
     <SiteContent>
       <PageHeader title={t.aboutTitle} text={t.aboutText} />
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-[1.15fr_.85fr]">
+        <Reveal className="card relative overflow-hidden p-8">
+          <div className="absolute -right-20 -top-20 size-56 rounded-full bg-cyan-300/10 blur-3xl" />
+          <span className="tag">{t.aboutPill}</span>
+          <h2 className="mt-6 max-w-2xl text-3xl font-semibold tracking-tight text-white">
+            {locale === "en"
+              ? "I build the connective tissue between models, products, and systems."
+              : "我关注模型、产品与系统之间的连接层。"}
+          </h2>
+          <p className="mt-5 leading-8 text-slate-300">{t.aboutNarrative}</p>
+          <p className="mt-4 leading-8 text-slate-300">{t.aboutBridge}</p>
+        </Reveal>
+        <Reveal className="card p-8">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200/80">
+            {locale === "en" ? "Operating mode" : "工作方式"}
+          </p>
+          <div className="mt-6 space-y-4">
+            {[
+              locale === "en"
+                ? "Turn ambiguous AI ideas into inspectable workflows."
+                : "把模糊 AI 想法变成可检查的工作流。",
+              locale === "en"
+                ? "Balance product speed with maintainable implementation."
+                : "在产品速度和工程可维护性之间做平衡。",
+              locale === "en"
+                ? "Use trading and quant contexts to sharpen reliability instincts."
+                : "用交易和量化场景强化可靠性判断。",
+            ].map((item) => (
+              <div
+                className="flex gap-3 rounded-2xl border border-white/10 bg-white/[.04] p-4"
+                key={item}
+              >
+                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-cyan-300" />
+                <span className="text-sm leading-6 text-slate-300">{item}</span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+      <div className="mt-5 grid gap-5 lg:grid-cols-3">
         {[
           [
             "AI Systems",
@@ -305,8 +381,17 @@ function ProjectGrid({
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {visible.map((project, index) => {
         const p = localize(project, locale);
+        const accent = getProjectAccent(project.category);
         return (
-          <Reveal delay={index * 0.04} className="card group" key={project.slug}>
+          <Reveal
+            delay={index * 0.04}
+            className="card group relative overflow-hidden hover:-translate-y-1 hover:border-cyan-300/30"
+            key={project.slug}
+          >
+            <div
+              className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accent.gradient}`}
+            />
+            <ProjectPreview project={project} />
             <div className="mb-6 flex items-center justify-between">
               <span className="tag">{project.category}</span>
               <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs text-emerald-100">
@@ -410,8 +495,11 @@ function ProfileCard({ locale }: { locale: Locale }) {
 
   return (
     <Reveal delay={0.12} className="relative">
-      <div className="rounded-[2rem] border border-white/10 bg-white/[.06] p-5 shadow-2xl shadow-cyan-950/40 backdrop-blur">
-        <div className="rounded-[1.5rem] border border-cyan-300/20 bg-slate-950/80 p-5">
+      <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-cyan-300/10 blur-3xl" />
+      <div className="rounded-[2rem] border border-white/10 bg-white/[.06] p-4 shadow-2xl shadow-cyan-950/50 backdrop-blur sm:p-5">
+        <div className="relative overflow-hidden rounded-[1.5rem] border border-cyan-300/20 bg-slate-950/80 p-5">
+          <div className="absolute right-0 top-0 size-44 rounded-full bg-cyan-300/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 size-40 rounded-full bg-fuchsia-300/10 blur-3xl" />
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
             <AvatarVisual />
             <div>
@@ -425,6 +513,24 @@ function ProfileCard({ locale }: { locale: Locale }) {
                 {locale === "en" ? profile.headline : profile.headlineZh}
               </p>
             </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-3 gap-3">
+            {[
+              ["4", locale === "en" ? "internships" : "段实习"],
+              ["3", locale === "en" ? "domains" : "个方向"],
+              ["2", locale === "en" ? "languages" : "种语言"],
+            ].map(([value, label]) => (
+              <div
+                className="rounded-2xl border border-white/10 bg-white/[.045] p-3 text-center"
+                key={label}
+              >
+                <p className="text-2xl font-semibold text-white">{value}</p>
+                <p className="mt-1 text-[11px] uppercase tracking-wide text-slate-400">
+                  {label}
+                </p>
+              </div>
+            ))}
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -477,6 +583,50 @@ function AvatarVisual() {
         ZZ
       </span>
     </div>
+  );
+}
+
+function ProjectPreview({ project }: { project: Project }) {
+  const accent = getProjectAccent(project.category);
+  const nodes = project.category === "Trading Systems" ? 8 : 6;
+
+  return (
+    <div
+      className={`mb-6 overflow-hidden rounded-3xl border ${accent.ring} bg-gradient-to-br ${accent.gradient} p-4`}
+      aria-label={`${project.category} visual preview`}
+    >
+      <div className="rounded-2xl border border-white/10 bg-slate-950/65 p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <span className="text-xs uppercase tracking-[0.25em] text-slate-400">
+            {accent.label}
+          </span>
+          <span
+            className={`size-2 rounded-full ${accent.dot} shadow-[0_0_18px_currentColor]`}
+          />
+        </div>
+        <div className="grid grid-cols-4 gap-2">
+          {Array.from({ length: nodes }).map((_, index) => (
+            <div
+              className={
+                index % 3 === 0
+                  ? "h-10 rounded-xl border border-white/10 bg-white/[.08]"
+                  : "h-10 rounded-xl border border-white/10 bg-white/[.04]"
+              }
+              key={index}
+            />
+          ))}
+          <div className="col-span-2 h-10 rounded-xl border border-cyan-300/20 bg-cyan-300/10" />
+          <div className="h-10 rounded-xl border border-white/10 bg-white/[.04]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function getProjectAccent(category: string) {
+  return (
+    categoryAccents[category as keyof typeof categoryAccents] ??
+    categoryAccents["AI Systems"]
   );
 }
 
