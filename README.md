@@ -7,7 +7,7 @@ Modern responsive portfolio website for Zi Zuo Lee.
 - Next.js App Router
 - TypeScript
 - Tailwind CSS
-- Framer Motion
+- CSS-first responsive motion and interactions
 
 ## Development
 
@@ -37,10 +37,10 @@ Replace the PDFs there when the resume is updated.
 Optional profile photo:
 
 ```txt
-public/profile/avatar.jpg
+public/profile/avatar.png
 ```
 
-If this file exists, the site renders it in the hero profile card. If it does not exist, the site renders the built-in `ZZ` fallback identity card.
+If this file exists, the site renders it in the hero and About page. If it does not exist, the site renders the built-in `ZZ` fallback identity card.
 
 For production SEO URLs, set:
 
@@ -56,9 +56,11 @@ Without this environment variable, the site falls back to the current placeholde
 - `/projects`
 - `/projects/[slug]`
 - `/experience`
+- `/academics`
 - `/resume`
 - `/about`
 - `/contact`
 - `/zh`
 - `/zh/projects`
 - `/zh/projects/[slug]`
+- `/zh/academics`
